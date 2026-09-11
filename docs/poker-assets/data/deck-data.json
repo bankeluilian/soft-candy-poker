@@ -1,0 +1,418 @@
+[
+  {
+    "filename": "cards/spades/card-spades-ace.svg",
+    "suit": "spades",
+    "rank": "ace",
+    "label": "A",
+    "value": 14,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/spades/card-spades-two.svg",
+    "suit": "spades",
+    "rank": "two",
+    "label": "2",
+    "value": 2,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/spades/card-spades-three.svg",
+    "suit": "spades",
+    "rank": "three",
+    "label": "3",
+    "value": 3,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/spades/card-spades-four.svg",
+    "suit": "spades",
+    "rank": "four",
+    "label": "4",
+    "value": 4,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/spades/card-spades-five.svg",
+    "suit": "spades",
+    "rank": "five",
+    "label": "5",
+    "value": 5,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/spades/card-spades-six.svg",
+    "suit": "spades",
+    "rank": "six",
+    "label": "6",
+    "value": 6,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/spades/card-spades-seven.svg",
+    "suit": "spades",
+    "rank": "seven",
+    "label": "7",
+    "value": 7,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/spades/card-spades-eight.svg",
+    "suit": "spades",
+    "rank": "eight",
+    "label": "8",
+    "value": 8,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/spades/card-spades-nine.svg",
+    "suit": "spades",
+    "rank": "nine",
+    "label": "9",
+    "value": 9,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/spades/card-spades-ten.svg",
+    "suit": "spades",
+    "rank": "ten",
+    "label": "10",
+    "value": 10,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/spades/card-spades-jack.svg",
+    "suit": "spades",
+    "rank": "jack",
+    "label": "J",
+    "value": 11,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/spades/card-spades-queen.svg",
+    "suit": "spades",
+    "rank": "queen",
+    "label": "Q",
+    "value": 12,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/spades/card-spades-king.svg",
+    "suit": "spades",
+    "rank": "king",
+    "label": "K",
+    "value": 13,
+    "color": "#4a2c1b"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-ace.svg",
+    "suit": "hearts",
+    "rank": "ace",
+    "label": "A",
+    "value": 14,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-two.svg",
+    "suit": "hearts",
+    "rank": "two",
+    "label": "2",
+    "value": 2,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-three.svg",
+    "suit": "hearts",
+    "rank": "three",
+    "label": "3",
+    "value": 3,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-four.svg",
+    "suit": "hearts",
+    "rank": "four",
+    "label": "4",
+    "value": 4,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-five.svg",
+    "suit": "hearts",
+    "rank": "five",
+    "label": "5",
+    "value": 5,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-six.svg",
+    "suit": "hearts",
+    "rank": "six",
+    "label": "6",
+    "value": 6,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-seven.svg",
+    "suit": "hearts",
+    "rank": "seven",
+    "label": "7",
+    "value": 7,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-eight.svg",
+    "suit": "hearts",
+    "rank": "eight",
+    "label": "8",
+    "value": 8,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-nine.svg",
+    "suit": "hearts",
+    "rank": "nine",
+    "label": "9",
+    "value": 9,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-ten.svg",
+    "suit": "hearts",
+    "rank": "ten",
+    "label": "10",
+    "value": 10,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-jack.svg",
+    "suit": "hearts",
+    "rank": "jack",
+    "label": "J",
+    "value": 11,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-queen.svg",
+    "suit": "hearts",
+    "rank": "queen",
+    "label": "Q",
+    "value": 12,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/hearts/card-hearts-king.svg",
+    "suit": "hearts",
+    "rank": "king",
+    "label": "K",
+    "value": 13,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-ace.svg",
+    "suit": "diamonds",
+    "rank": "ace",
+    "label": "A",
+    "value": 14,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-two.svg",
+    "suit": "diamonds",
+    "rank": "two",
+    "label": "2",
+    "value": 2,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-three.svg",
+    "suit": "diamonds",
+    "rank": "three",
+    "label": "3",
+    "value": 3,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-four.svg",
+    "suit": "diamonds",
+    "rank": "four",
+    "label": "4",
+    "value": 4,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-five.svg",
+    "suit": "diamonds",
+    "rank": "five",
+    "label": "5",
+    "value": 5,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-six.svg",
+    "suit": "diamonds",
+    "rank": "six",
+    "label": "6",
+    "value": 6,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-seven.svg",
+    "suit": "diamonds",
+    "rank": "seven",
+    "label": "7",
+    "value": 7,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-eight.svg",
+    "suit": "diamonds",
+    "rank": "eight",
+    "label": "8",
+    "value": 8,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-nine.svg",
+    "suit": "diamonds",
+    "rank": "nine",
+    "label": "9",
+    "value": 9,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-ten.svg",
+    "suit": "diamonds",
+    "rank": "ten",
+    "label": "10",
+    "value": 10,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-jack.svg",
+    "suit": "diamonds",
+    "rank": "jack",
+    "label": "J",
+    "value": 11,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-queen.svg",
+    "suit": "diamonds",
+    "rank": "queen",
+    "label": "Q",
+    "value": 12,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/diamonds/card-diamonds-king.svg",
+    "suit": "diamonds",
+    "rank": "king",
+    "label": "K",
+    "value": 13,
+    "color": "#ef654d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-ace.svg",
+    "suit": "clubs",
+    "rank": "ace",
+    "label": "A",
+    "value": 14,
+    "color": "#77936d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-two.svg",
+    "suit": "clubs",
+    "rank": "two",
+    "label": "2",
+    "value": 2,
+    "color": "#77936d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-three.svg",
+    "suit": "clubs",
+    "rank": "three",
+    "label": "3",
+    "value": 3,
+    "color": "#77936d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-four.svg",
+    "suit": "clubs",
+    "rank": "four",
+    "label": "4",
+    "value": 4,
+    "color": "#77936d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-five.svg",
+    "suit": "clubs",
+    "rank": "five",
+    "label": "5",
+    "value": 5,
+    "color": "#77936d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-six.svg",
+    "suit": "clubs",
+    "rank": "six",
+    "label": "6",
+    "value": 6,
+    "color": "#77936d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-seven.svg",
+    "suit": "clubs",
+    "rank": "seven",
+    "label": "7",
+    "value": 7,
+    "color": "#77936d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-eight.svg",
+    "suit": "clubs",
+    "rank": "eight",
+    "label": "8",
+    "value": 8,
+    "color": "#77936d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-nine.svg",
+    "suit": "clubs",
+    "rank": "nine",
+    "label": "9",
+    "value": 9,
+    "color": "#77936d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-ten.svg",
+    "suit": "clubs",
+    "rank": "ten",
+    "label": "10",
+    "value": 10,
+    "color": "#77936d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-jack.svg",
+    "suit": "clubs",
+    "rank": "jack",
+    "label": "J",
+    "value": 11,
+    "color": "#77936d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-queen.svg",
+    "suit": "clubs",
+    "rank": "queen",
+    "label": "Q",
+    "value": 12,
+    "color": "#77936d"
+  },
+  {
+    "filename": "cards/clubs/card-clubs-king.svg",
+    "suit": "clubs",
+    "rank": "king",
+    "label": "K",
+    "value": 13,
+    "color": "#77936d"
+  }
+]

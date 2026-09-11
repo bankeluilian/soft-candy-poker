@@ -1,0 +1,50 @@
+[
+  {
+    "filename": "chips/chip-1.svg",
+    "value": "1"
+  },
+  {
+    "filename": "chips/chip-5.svg",
+    "value": "5"
+  },
+  {
+    "filename": "chips/chip-10.svg",
+    "value": "10"
+  },
+  {
+    "filename": "chips/chip-25.svg",
+    "value": "25"
+  },
+  {
+    "filename": "chips/chip-50.svg",
+    "value": "50"
+  },
+  {
+    "filename": "chips/chip-100.svg",
+    "value": "100"
+  },
+  {
+    "filename": "chips/chip-500.svg",
+    "value": "500"
+  },
+  {
+    "filename": "chips/chip-1k.svg",
+    "value": "1K"
+  },
+  {
+    "filename": "chips/chip-5k.svg",
+    "value": "5K"
+  },
+  {
+    "filename": "chips/chip-10k.svg",
+    "value": "10K"
+  },
+  {
+    "filename": "chips/chip-25k.svg",
+    "value": "25K"
+  },
+  {
+    "filename": "chips/chip-100k.svg",
+    "value": "100K"
+  }
+]
