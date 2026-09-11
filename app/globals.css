@@ -248,9 +248,33 @@ html, body { overflow-x: clip; }
 .dealer-deck img { position: absolute; width: 43px; height: 58px; border-radius: 6px; filter: drop-shadow(0 5px 7px rgba(36,49,31,.28)); }
 .dealer-deck img:first-child { transform: rotate(-7deg); left: 0; top: 5px; }
 .dealer-deck img:last-child { transform: rotate(5deg); right: 0; top: 0; }
+.is-dealing .dealer-deck img:last-child { animation: dealer-thumb .32s ease-in-out infinite alternate; }
 .deal-status { position: absolute; right: 15%; top: 86px; z-index: 5; display: flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 99px; color: #f7fff1; background: rgba(43,74,39,.55); font-size: 12px; animation: deal-status-pulse .65s ease-in-out infinite alternate; }
 .deal-status i { width: 6px; height: 6px; border-radius: 50%; background: #ffe69a; box-shadow: 0 0 0 4px rgba(255,230,154,.18); }
 .is-dealing .action-panel { pointer-events: none; filter: saturate(.75); opacity: .78; }
+.deal-flight-layer { position: absolute; inset: 0; z-index: 16; pointer-events: none; overflow: visible; }
+.deal-flight-card {
+  --deal-left: 50%;
+  --deal-top: 50%;
+  --deal-delay: 0s;
+  --round-shift: 0px;
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 43px;
+  height: 60px;
+  border-radius: 6px;
+  opacity: 0;
+  filter: drop-shadow(0 10px 10px rgba(30,38,24,.32));
+  animation: deal-flight .54s cubic-bezier(.18,.72,.26,1) var(--deal-delay) both;
+}
+.deal-flight-card.round-2 { --round-shift: 13px; }
+.deal-flight-card.to-p1 { --deal-left: 24%; --deal-top: 11%; }
+.deal-flight-card.to-p2 { --deal-left: 76%; --deal-top: 11%; }
+.deal-flight-card.to-p3 { --deal-left: 92%; --deal-top: 48%; }
+.deal-flight-card.to-p4 { --deal-left: 50%; --deal-top: 91%; }
+.deal-flight-card.to-p5 { --deal-left: 24%; --deal-top: 84%; }
+.deal-flight-card.to-p6 { --deal-left: 8%; --deal-top: 48%; }
 .deal-card { --deal-x: 0px; --deal-y: -150px; animation: deal-hole .62s cubic-bezier(.2,.86,.28,1.08) both; }
 .p1 .deal-card { --deal-x: 260px; --deal-y: 150px; }
 .p2 .deal-card { --deal-x: -220px; --deal-y: 150px; }
@@ -265,6 +289,13 @@ html, body { overflow-x: clip; }
 .board-deal { animation: deal-board .5s cubic-bezier(.18,.8,.3,1.06) both; }
 .community-cards .board-deal:nth-child(1) { animation-delay: .04s; }.community-cards .board-deal:nth-child(2) { animation-delay: .12s; }.community-cards .board-deal:nth-child(3) { animation-delay: .2s; }
 @keyframes deal-hole { from { opacity: 0; transform: translate(var(--deal-x), var(--deal-y)) rotate(-18deg) scale(.68); filter: drop-shadow(0 18px 18px rgba(37,47,31,.08)); } 70% { opacity: 1; } to { opacity: 1; transform: translate(0,0) rotate(0) scale(1); } }
+@keyframes deal-flight {
+  0% { left: 50%; top: 52%; opacity: 0; transform: translate(-50%,-50%) rotate(-14deg) scale(.72); }
+  12% { opacity: 1; }
+  72% { opacity: 1; transform: translate(-50%,calc(-50% - 18px)) rotate(8deg) scale(1.02); }
+  100% { left: calc(var(--deal-left) + var(--round-shift)); top: var(--deal-top); opacity: 0; transform: translate(-50%,-50%) rotate(1deg) scale(.9); }
+}
+@keyframes dealer-thumb { to { transform: translate(9px,-5px) rotate(12deg); } }
 @keyframes deal-board { from { opacity: 0; transform: translate(210px,-110px) rotate(12deg) scale(.72); } to { opacity: 1; transform: translate(0,0) rotate(0) scale(1); } }
 @keyframes deal-status-pulse { to { transform: translateY(-2px); background: rgba(43,74,39,.7); } }
 
@@ -812,6 +843,8 @@ button { -webkit-tap-highlight-color: transparent; user-select: none; }
   .table-seat.ai-thinking > img,
   .ai-thought { animation: none !important; }
   .chip-toss { animation: chip-toss-fade .3s linear forwards; }
+  .deal-flight-card { display: none; }
+  .is-dealing .dealer-deck img:last-child { animation: none; }
 }
 @keyframes chip-toss-fade { from { opacity: .9; } to { opacity: 0; } }
 
