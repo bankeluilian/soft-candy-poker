@@ -476,7 +476,7 @@ function PokerGame() {
       <section className="main-shell">
         {!bare && <Topbar resetChips={() => setModal("resetChips")} chips={chips} xp={xp} messages={() => go("messages")} settings={() => go("settings")} />}
         <div className="page-stage">
-          {page === "lobby" && <Lobby chips={chips} startMatch={startMatch} create={() => setModal("create")} join={() => setModal("join")} go={go} toast={toast} networkStatus={realtime.status} onlineCount={realtime.onlineCount} latency={realtime.latency} />}
+          {page === "lobby" && <Lobby chips={chips} results={handHistory} claimed={claimed} equipped={equipped} startMatch={startMatch} create={() => setModal("create")} join={() => setModal("join")} go={go} networkStatus={realtime.status} />}
           {page === "room" && <FriendRoom code={roomCode} owner={roomOwner} room={realtime.room} localOptions={localOptions} guestId={realtime.guestId} networkStatus={realtime.status} start={startFriendRoom} toggleReady={realtime.toggleReady} leave={() => go("lobby")} toast={toast} />}
           {page === "table" && <PokerTable key={`${handNo}-${tableSeed}`} seed={tableSeed} handNo={handNo} initialStack={tableStack} config={config} previousStacks={previousStacks} aiMemories={aiMemories} settings={settings} equipped={equipped} leave={() => setModal("leave")} finish={finishHand} rules={() => setModal("rules")} reconnect={() => setModal("reconnect")} toast={toast} toggleMusic={() => { setSettings((v) => ({ ...v, musicEnabled: !v.musicEnabled })); toast(settings.musicEnabled ? "背景音乐已关闭" : "背景音乐已开启"); }} />}
           {page === "friends" && <Friends toast={toast} invite={() => { setRoomOwner(true); createRoom(); }} />}
@@ -510,52 +510,55 @@ function PokerGame() {
 
 function Sidebar({ page, go, taskBadge = 0 }: { page: Page; go: (page: Page) => void; taskBadge?: number }) {
   return <aside className="sidebar">
-    <button className="logo-button" onClick={() => go("lobby")} aria-label="返回游戏大厅"><img src={`${A}/brand/logo-primary.svg`} alt="软糖扑克" /></button>
+    <button className="logo-button cream-brand" onClick={() => go("lobby")} aria-label="返回游戏大厅"><img src={`${A}/avatars/avatar-player-cream-bear.webp`} alt="" /><span><b>软糖扑克<span>♣</span></b><small>CREAM POKER CLUB</small></span></button>
+    <p className="nav-caption">你的小小扑克俱乐部</p>
     <nav>{navItems.filter((item) => !STATIC_BUILD || item.page !== "friends").map((item) => <button key={item.page} className={page === item.page || (page === "room" && item.page === "lobby") ? "active" : ""} onClick={() => go(item.page)}><span>{item.icon}</span>{item.label}{item.page === "tasks" && taskBadge > 0 && <em>{taskBadge}</em>}</button>)}</nav>
-    <img className="sidebar-decor" src={`${A}/illustrations/decor-playing-cards-leaves.webp`} alt="" />
+    <div className="sidebar-note"><img src={`${A}/characters/mascot-waving.webp`} alt="挥手的小熊"/><b>慢慢玩，开心就好</b><span>好心情，永远是好底牌。</span></div>
     <p className="virtual-note">纯虚拟筹码<br/>不可充值、交易或提现</p>
   </aside>;
 }
 
 function Topbar({ chips, xp, messages, settings, resetChips }: { resetChips: () => void; chips: number; xp: number; messages: () => void; settings: () => void }) {
   return <header className="topbar">
-    <button className="player-mini"><img src={`${A}/avatars/avatar-player-cream-bear.webp`} alt="榴莲同学"/><span><b>榴莲同学</b><small>Lv. 8 · {xp}/600 XP</small></span></button>
-    <div className="top-actions">{chips <= 0 && <button className="btn primary" onClick={resetChips}>重置筹码</button>}<button className="chip-balance"><Chip value="1K"/><span>虚拟筹码</span><b>{chips.toLocaleString()}</b></button><button className="icon-button" onClick={messages} aria-label="消息">✉<em>2</em></button><button className="icon-button" onClick={settings} aria-label="设置">⚙</button></div>
+    <div className="club-breadcrumb"><span>♣</span> 软糖俱乐部 <i>/</i> 欢迎入座</div>
+    <div className="top-actions">{chips <= 0 && <button className="btn primary" onClick={resetChips}>重置筹码</button>}<div className="chip-balance"><Chip value="1K"/><span>小金库</span><b>{chips.toLocaleString()}</b></div><button className="icon-button" onClick={messages} aria-label="消息">✉</button><button className="icon-button" onClick={settings} aria-label="设置">⚙</button><div className="player-mini"><img src={`${A}/avatars/avatar-player-cream-bear.webp`} alt=""/><span><b>榴莲同学</b><small>{xp} XP · 本地玩家</small></span></div></div>
   </header>;
 }
 
-function Lobby({ chips, startMatch, create, join, go, toast, networkStatus, onlineCount, latency }: { chips: number; startMatch: () => void; create: () => void; join: () => void; go: (p: Page) => void; toast: (s: string) => void; networkStatus: RealtimeStatus; onlineCount: number; latency: number | null }) {
-  return <div className="lobby page-content">
-    <div className="page-heading"><div><p>欢迎回来，榴莲同学</p><h1>游戏大厅</h1></div><span className={`service-ok realtime-${networkStatus}`}><i/> {STATIC_BUILD ? "静态娱乐版 · AI 单机对局" : networkStatus === "online" ? `实时服务已连接 · ${latency ?? "—"} ms · ${onlineCount} 人在线` : networkStatus === "connecting" ? "正在连接实时服务…" : "离线模式 · 自动重连中"}</span></div>
-    <div className="lobby-layout">
-      <section className="lobby-main">
-        <article className="quick-start">
-          <div className="quick-copy"><span className="soft-label">6 人快速桌</span><h2>快速开始</h2><ul><li><Chip value="100"/>盲注 50/100</li><li><Chip value="10K"/>默认买入 10,000</li><li>◷ 预计等待 8 秒</li></ul><button className="btn primary large" onClick={startMatch}>开始匹配</button></div>
-          <img src={`${A}/characters/mascot-dealer-cards.webp`} alt="小熊荷官" />
+function Lobby({ chips, results, claimed, equipped, startMatch, create, join, go, networkStatus }: {
+  chips: number; results: HandResult[]; claimed: number[]; equipped: string;
+  startMatch: () => void; create: () => void; join: () => void; go: (p: Page) => void; networkStatus: RealtimeStatus;
+}) {
+  const tasks = buildTasks(results);
+  const completed = tasks.filter((task) => task.progress >= task.max).length;
+  const wins = results.filter((result) => result.heroWon).length;
+  const net = results.reduce((sum, result) => sum + result.heroDelta, 0);
+  return <div className="lobby page-content cream-lobby">
+    <div className="cream-heading"><div><p>HELLO, POKER FRIEND</p><h1>下午茶时间，来一手？<span>♧</span></h1><p className="heading-note">欢迎回来，榴莲同学。小伙伴们已经在等你啦。</p></div><span className="cream-status"><i/> AI 牌桌随时开放</span></div>
+    <div className="cream-lobby-grid">
+      <section className="cream-primary">
+        <article className="cream-hero">
+          <div className="cream-hero-copy"><span className="cream-tag">✦ 经典六人桌 · 轻松开局</span><h2>把烦恼放一边，<br/>把好牌留手里。</h2><p>和五位动物伙伴一起，享受一场小小的博弈。</p><div className="cream-table-facts"><span>♠ 无限注德州</span><span>盲注 50 / 100</span></div><button className="btn primary cream-play" onClick={startMatch}>开始一局 <span>→</span></button><small>纯虚拟筹码 · 输光也可以重新出发</small></div>
+          <div className="cream-hero-art"><span className="bear-note">给你留好座位啦 ♡</span><img src={`${A}/characters/mascot-dealer-cards.webp`} alt="奶油小熊拿着扑克牌邀请你入座"/><span className="bear-sign">YOUR LUCKY LITTLE DEALER</span></div>
         </article>
-        <div className="lobby-cards">
-          {STATIC_BUILD ? <>
-            <article className="mode-card green"><div><h3>AI 娱乐对局</h3><p>完整六人牌桌，数据只保存在当前浏览器</p></div><img src={`${A}/characters/mascot-study-notebook.webp`} alt=""/><button className="btn green" onClick={startMatch}>开始对局</button></article>
-            <article className="mode-card blue"><div><h3>本地战绩</h3><p>查看最近牌局、胜率和虚拟筹码变化</p></div><img src={`${A}/characters/mascot-magnifier.webp`} alt=""/><button className="btn blue" onClick={() => go("history")}>查看战绩</button></article>
-          </> : <>
-            <article className="mode-card green"><div><h3>创建好友房</h3><p>2～6 人，自定义盲注、买入和操作时间</p></div><img src={`${A}/characters/mascot-study-notebook.webp`} alt=""/><button className="btn green" onClick={create}>创建房间</button></article>
-            <article className="mode-card blue"><div><h3>加入好友房</h3><p>输入好友分享的 6 位房间码</p></div><img src={`${A}/characters/mascot-magnifier.webp`} alt=""/><button className="btn blue" onClick={join}>加入房间</button></article>
-          </>}
-          <article className="mode-card coral"><div><h3>新手训练</h3><p>熟悉牌型与基本操作</p></div><img src={`${A}/characters/mascot-reading-rules.webp`} alt=""/><button className="btn coral" onClick={() => go("tutorial")}>开始训练</button></article>
+        <div className="cream-section-heading"><h2>今天想怎么玩</h2><span>一点练习，一点快乐</span></div>
+        <div className="cream-mode-grid">
+          <button className="cream-mode mode-pink" onClick={() => go("tutorial")}><span className="mode-kicker">从第一手开始</span><h3>新手小课堂</h3><p>认识牌型，慢慢上手</p><img src={`${A}/characters/mascot-reading-rules.webp`} alt=""/><span className="mode-link">去学习 <b>↗</b></span></button>
+          <button className="cream-mode mode-sage" onClick={() => go("history")}><span className="mode-kicker">每一手都有收获</span><h3>我的牌局手账</h3><p>回看对局，发现进步</p><img src={`${A}/characters/mascot-study-notebook.webp`} alt=""/><span className="mode-link">翻开手账 <b>↗</b></span></button>
+          <button className="cream-mode mode-butter" onClick={() => go("store")}><span className="mode-kicker">小小的仪式感</span><h3>软糖杂货铺</h3><p>给下一局换个好心情</p><img src={`${A}/characters/mascot-card-back.webp`} alt=""/><span className="mode-link">逛一逛 <b>↗</b></span></button>
         </div>
+        <section className="cream-companions"><div className="cream-section-heading"><h2>认识你的牌桌伙伴</h2><span>五种性格，五种小心思</span></div><div className="companion-list">{aiSeats.map((seat) => <div className="companion" key={seat}><img src={`${A}/avatars/${seatAvatars[seat]}`} alt=""/><b>{seatNames[seat]}</b><span>{aiProfiles[seat].style}</span></div>)}</div></section>
+        {!STATIC_BUILD && <section className="cream-room-strip"><div><b>和朋友约一场练习</b><p>{networkStatus === "online" ? "同步入座和开局，各自与 AI 对局" : "房间服务连接后可用，AI 对局不受影响"}</p></div><button className="btn ghost" onClick={join}>房间码加入</button><button className="btn soft" onClick={create}>创建房间 ↗</button></section>}
       </section>
-      <aside className="lobby-side">
-        {STATIC_BUILD ? <section className="side-card invite-card"><h3>无需安装即可游玩</h3><p><b>打开网页直接开始</b><span>进度保存在本机浏览器中</span></p><div><button className="btn purple" onClick={startMatch}>开始 AI 对局</button></div></section> : <><section className="side-card online-friends"><div className="card-title"><h3>在线好友</h3><button onClick={() => go("friends")}>全部好友 ›</button></div>{[
-          ["avatar-caramel-bear.webp", "小熊软糖"], ["avatar-white-rabbit.webp", "奶盖兔兔"], ["avatar-gray-cat.webp", "喵小灰"]
-        ].map(([avatar, name]) => <div className="online-row" key={name}><img src={`${A}/avatars/${avatar}`} alt=""/><span><b>{name}</b><small><i/> 在线</small></span><button onClick={() => toast(`已向${name}发送牌桌邀请`)}>邀请</button></div>)}</section>
-        <section className="side-card invite-card"><h3>最近邀请</h3><p><b>好友房 · 盲注 50/100</b><span>3/6 人 · 来自奶盖兔兔</span></p><div><button className="btn purple" onClick={() => toast("邀请已接受，正在进入房间")}>接受</button><button className="btn ghost" onClick={() => toast("已拒绝邀请")}>拒绝</button></div></section></>}
-        <section className="side-card task-peek"><div className="card-title"><h3>今日任务</h3><button onClick={() => go("tasks")}>查看 ›</button></div><p>完成 3 手牌局 <b>1/3</b></p><div className="progress"><i style={{ width: "33%" }}/></div></section>
-        <section className="streak-card"><span>♕</span><p>本周连胜 <b>2</b></p><small>余额 {chips.toLocaleString()}</small></section>
+      <aside className="cream-aside">
+        <section className="cream-pocket"><div className="cream-section-heading"><h2>我的小金库</h2><span>♧</span></div><div className="pocket-total"><Chip value="10K"/><strong>{chips.toLocaleString()}</strong></div><p>虚拟筹码 · 快乐不设门槛</p><div className="pocket-stats"><div><b>{results.length}</b><span>已玩手数</span></div><div><b>{results.length ? `${Math.round(wins / results.length * 100)}%` : '—'}</b><span>获胜手数占比</span></div><div><b>{net >= 0 ? '+' : ''}{net.toLocaleString()}</b><span>牌局净赢</span></div></div></section>
+        <section className="cream-task-card"><div className="cream-section-heading"><h2>一点小目标</h2><span>{completed} / {tasks.length}</span></div><p className="task-intro">攒一点快乐，也攒一点筹码。</p><div className="cream-task-list">{tasks.map((task, index) => <button key={task.title} className="cream-task" onClick={() => go("tasks")}><span className={`task-tick ${task.progress >= task.max ? 'done' : ''}`}>{task.progress >= task.max ? '✓' : index + 1}</span><span className="task-detail"><b>{task.title}</b><small>{claimed.includes(index) ? '奖励已领取' : `+${task.reward} 筹码`}</small><span className="progress"><i style={{width: `${task.progress / task.max * 100}%`}}/></span></span><em>{task.progress}/{task.max}</em></button>)}</div><button className="cream-text-button" onClick={() => go("tasks")}>查看任务与奖励 <span>→</span></button></section>
+        <button className="cream-outfit" onClick={() => go("store")}><div><span className="mode-kicker">今日牌桌穿搭</span><h3>{equipped}</h3><p>我的卡背收藏 →</p></div><img src={`${A}/card-backs/${cardBackFiles[equipped] || cardBackFiles['经典红']}`} alt={`${equipped}卡背`}/></button>
+        <p className="cream-save-note">♡ 你的牌局手账会保存在这个浏览器里。</p>
       </aside>
     </div>
   </div>;
 }
-
 function FriendRoom({ code, owner, room, localOptions, guestId, networkStatus, start, toggleReady, leave, toast }: { code: string; owner: boolean; room: RealtimeRoom | null; localOptions: RoomOptions; guestId: string; networkStatus: RealtimeStatus; start: () => void; toggleReady: (ready: boolean) => boolean; leave: () => void; toast: (s: string) => void }) {
   const fallback: RealtimeMember[] = [
     { id: "local", name: "榴莲同学", avatar: "avatar-player-cream-bear.webp", ready: true, connected: true, seat: 0 },
@@ -630,7 +633,6 @@ function PokerTable({ seed, handNo, initialStack, config, previousStacks, aiMemo
   }, [engine, settings.chipAnimation]);
   const [dealing, setDealing] = useState(settings.dealAnimation);
   const [showdown, setShowdown] = useState<ShowdownState | null>(null);
-  const [controlsCollapsed, setControlsCollapsed] = useState(true);
   const [secondsLeft, setSecondsLeft] = useState(config.turnSeconds);
   const [raiseTarget, setRaiseTarget] = useState(300);
   const [message, setMessage] = useState("随机牌序已锁定，等待首位玩家行动");
@@ -874,7 +876,7 @@ function PokerTable({ seed, handNo, initialStack, config, previousStacks, aiMemo
       <div className={`hero-cards ${showdown?.winnerSeats.includes(3) ? "showdown-winner" : showdown ? "showdown-loser" : ""}`}><PlayingCard card={deal.players[3][0]} className={settings.dealAnimation ? "deal-card" : ""}/><PlayingCard card={deal.players[3][1]} className={settings.dealAnimation ? "deal-card" : ""}/><span>{showdown ? bestOfSeven([...deal.players[3], ...deal.board]).label : settings.handHint ? heroLabel : "牌力提示已关闭"}</span></div>
     </div>
 
-    {showdown ? <section className="showdown-footer"><div><span>全员亮牌</span><b>{showdown.result.winnerName} · {showdown.result.handLabel}</b></div><p>{showdown.result.sidePots && showdown.result.sidePots.length > 1 ? `主池和 ${showdown.result.sidePots.length - 1} 个边池已经分别结算。` : "六位玩家底牌均已公开，稍后进入本手结算。"}</p><div className="showdown-progress"><i/></div></section> : <section className={`action-panel ${controlsCollapsed ? "collapsed" : "expanded"}`}><div className="hand-info"><div className="hand-info-head"><b>{settings.handHint ? heroLabel : "当前手牌"}</b><button className="panel-collapse" aria-expanded={!controlsCollapsed} onClick={() => setControlsCollapsed((value) => !value)}>{controlsCollapsed ? "更多下注选项⌃" : "精简操作区⌄"}</button></div><div className="hand-metrics"><span>剩余筹码<strong>{engine.stacks[3].toLocaleString()}</strong></span><span>本手已投入<strong>{engine.totalBets[3]}</strong></span><span>需要跟注<strong>{heroToCall}</strong></span></div><section className="odds-row" aria-label="成牌概率">{handOdds.map((item) => <span className={item.probability > 0 ? "possible" : ""} key={item.category}><b>{item.label}</b><em>{item.probability < .01 && item.probability > 0 ? "<0.01" : item.probability.toFixed(item.probability < 1 ? 2 : 1)}%</em></span>)}</section></div><div className={`countdown ${secondsLeft <= 5 ? "urgent" : ""}`}>{heroTurn ? secondsLeft : "…"}<small>{heroTurn ? "秒" : "等待"}</small></div><div className="bet-controls"><div className="main-actions"><button className="fold" disabled={!heroTurn} onClick={() => requestHeroAction("fold", engine.streetBets[3], "选择弃牌")}>弃牌</button>{heroToCall === 0 ? <button className="check" disabled={!heroTurn} onClick={() => requestHeroAction("check", engine.streetBets[3], "选择过牌")}>过牌</button> : <button className="check" disabled={!heroTurn} onClick={() => requestHeroAction("call", engine.currentBet, `跟注 ${Math.min(heroToCall, engine.stacks[3])}`)}>跟注 {Math.min(heroToCall, engine.stacks[3])}</button>}<button className="raise" disabled={!heroTurn || !canRaise} onClick={() => requestHeroAction(engine.currentBet > 0 ? "raise" : "bet", Math.max(minimumRaiseTarget, raiseTarget), `${engine.currentBet > 0 ? "加注至" : "下注"} ${Math.max(minimumRaiseTarget, raiseTarget)}`)}>{canRaise ? `${engine.currentBet > 0 ? "加注" : "下注"} ${Math.max(minimumRaiseTarget, raiseTarget)}` : "无法加注"}</button></div><div className="slider-row"><button disabled={!canRaise} onClick={() => setRaiseTarget(Math.max(minimumRaiseTarget, raiseTarget - 100))}>−</button><input type="range" min={Math.max(0, minimumRaiseTarget)} max={Math.max(minimumRaiseTarget, heroMaxTarget)} step="50" value={Math.min(Math.max(raiseTarget, minimumRaiseTarget), Math.max(minimumRaiseTarget, heroMaxTarget))} onChange={(event) => setRaiseTarget(Number(event.target.value))}/><button disabled={!canRaise} onClick={() => setRaiseTarget(Math.min(heroMaxTarget, raiseTarget + 100))}>＋</button><input aria-label="加注金额" disabled={!canRaise} value={Math.max(minimumRaiseTarget, raiseTarget)} onChange={(event) => setRaiseTarget(clamp(Number(event.target.value) || minimumRaiseTarget, minimumRaiseTarget, heroMaxTarget))}/></div><div className="quick-bets">{quickTargets.map(([label, value]) => <button disabled={!canRaise} key={label} onClick={() => setRaiseTarget(clamp(value, minimumRaiseTarget, heroMaxTarget))}>{label}</button>)}</div></div></section>}
+    {showdown ? <section className="showdown-footer"><div><span>全员亮牌</span><b>{showdown.result.winnerName} · {showdown.result.handLabel}</b></div><p>{showdown.result.sidePots && showdown.result.sidePots.length > 1 ? `主池和 ${showdown.result.sidePots.length - 1} 个边池已经分别结算。` : "六位玩家底牌均已公开，稍后进入本手结算。"}</p><div className="showdown-progress"><i/></div></section> : <section className="action-panel expanded"><div className="hand-info"><div className="hand-info-head"><b>{settings.handHint ? heroLabel : "当前手牌"}</b></div><div className="hand-metrics"><span>剩余筹码<strong>{engine.stacks[3].toLocaleString()}</strong></span><span>本手已投入<strong>{engine.totalBets[3]}</strong></span><span>需要跟注<strong>{heroToCall}</strong></span></div><section className="odds-row" aria-label="成牌概率">{handOdds.map((item) => <span className={item.probability > 0 ? "possible" : ""} key={item.category}><b>{item.label}</b><em>{item.probability < .01 && item.probability > 0 ? "<0.01" : item.probability.toFixed(item.probability < 1 ? 2 : 1)}%</em></span>)}</section></div><div className={`countdown ${secondsLeft <= 5 ? "urgent" : ""}`}>{heroTurn ? secondsLeft : "…"}<small>{heroTurn ? "秒" : "等待"}</small></div><div className="bet-controls"><div className="main-actions"><button className="fold" disabled={!heroTurn} onClick={() => requestHeroAction("fold", engine.streetBets[3], "选择弃牌")}>弃牌</button>{heroToCall === 0 ? <button className="check" disabled={!heroTurn} onClick={() => requestHeroAction("check", engine.streetBets[3], "选择过牌")}>过牌</button> : <button className="check" disabled={!heroTurn} onClick={() => requestHeroAction("call", engine.currentBet, `跟注 ${Math.min(heroToCall, engine.stacks[3])}`)}>跟注 {Math.min(heroToCall, engine.stacks[3])}</button>}<button className="raise" disabled={!heroTurn || !canRaise} onClick={() => requestHeroAction(engine.currentBet > 0 ? "raise" : "bet", Math.max(minimumRaiseTarget, raiseTarget), `${engine.currentBet > 0 ? "加注至" : "下注"} ${Math.max(minimumRaiseTarget, raiseTarget)}`)}>{canRaise ? `${engine.currentBet > 0 ? "加注" : "下注"} ${Math.max(minimumRaiseTarget, raiseTarget)}` : "无法加注"}</button></div><div className="slider-row"><button disabled={!canRaise} onClick={() => setRaiseTarget(Math.max(minimumRaiseTarget, raiseTarget - 100))}>−</button><input type="range" min={Math.max(0, minimumRaiseTarget)} max={Math.max(minimumRaiseTarget, heroMaxTarget)} step="50" value={Math.min(Math.max(raiseTarget, minimumRaiseTarget), Math.max(minimumRaiseTarget, heroMaxTarget))} onChange={(event) => setRaiseTarget(Number(event.target.value))}/><button disabled={!canRaise} onClick={() => setRaiseTarget(Math.min(heroMaxTarget, raiseTarget + 100))}>＋</button><input aria-label="加注金额" disabled={!canRaise} value={Math.max(minimumRaiseTarget, raiseTarget)} onChange={(event) => setRaiseTarget(clamp(Number(event.target.value) || minimumRaiseTarget, minimumRaiseTarget, heroMaxTarget))}/></div><div className="quick-bets">{quickTargets.map(([label, value]) => <button disabled={!canRaise} key={label} onClick={() => setRaiseTarget(clamp(value, minimumRaiseTarget, heroMaxTarget))}>{label}</button>)}</div></div></section>}
     {pendingAllIn && <div className="all-in-confirm"><section><span>ALL IN</span><h2>确认全下？</h2><p>将投入剩余的 {engine.stacks[3].toLocaleString()} 筹码。本次操作无法撤回。</p><div><button onClick={() => setPendingAllIn(null)}>再想想</button><button onClick={() => { const action = pendingAllIn; setPendingAllIn(null); submitAction(3, action.type, action.target, action.label); }}>确认全下</button></div></section></div>}
   </div>;
 }
