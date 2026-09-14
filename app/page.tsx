@@ -502,7 +502,7 @@ function PokerGame() {
       {modal === "legal" && <ModalShell close={() => setModal(legalReturnModal.current)} wide><h2>使用规则与免责声明</h2><LegalNotice /></ModalShell>}
       {modal === "resetChips" && <ModalShell close={() => setModal(page === "table" && handResult ? "settlement" : null)}><span className="modal-label">训练筹码补给</span><h2>筹码用完了，重新出发</h2><p>将虚拟筹码恢复至 {RESET_CHIPS.toLocaleString()}。战绩、等级、任务、装扮与设置都会保留。</p><button className="btn primary full" disabled={chips > 0} onClick={resetChips}>重置为 {RESET_CHIPS.toLocaleString()} 筹码</button></ModalShell>}
       {modal === "resetHistory" && <ResetHistory count={handHistory.length} close={() => setModal(null)} reset={resetHistory} />}
-      <footer className="legal-footer"><span>仅供娱乐 · 严禁赌博 · 虚拟筹码不可兑换财物</span><button onClick={() => { legalReturnModal.current = modal; setModal("legal"); }}>使用规则与免责声明</button></footer>
+      <footer className="legal-footer"><span>仅供娱乐 · 严禁赌博 · 虚拟筹码不可兑换财物</span><a className="business-contact-footer" href="mailto:2206037172@qq.com">游戏公司 / 工作室合作：2206037172@qq.com</a><button onClick={() => { legalReturnModal.current = modal; setModal("legal"); }}>使用规则与免责声明</button></footer>
       <div className="toast-stack">{toasts.map((item) => <div className="toast" key={item.id}>✓ {item.text}</div>)}</div>
     </main>
   );
@@ -534,7 +534,7 @@ function Lobby({ chips, results, claimed, equipped, startMatch, create, join, go
   const wins = results.filter((result) => result.heroWon).length;
   const net = results.reduce((sum, result) => sum + result.heroDelta, 0);
   return <div className="lobby page-content cream-lobby">
-    <div className="cream-heading"><div><p>HELLO, POKER FRIEND</p><h1>下午茶时间，来一手？<span>♧</span></h1><p className="heading-note">欢迎回来，榴莲同学。小伙伴们已经在等你啦。</p></div><span className="cream-status"><i/> AI 牌桌随时开放</span></div>
+    <div className="cream-heading"><div><p>HELLO, POKER FRIEND</p><h1>下午茶时间，来一手？<span>♧</span></h1><p className="heading-note">欢迎回来，榴莲同学。小伙伴们已经在等你啦。</p></div><div className="cream-heading-actions"><span className="cream-status"><i/> AI 牌桌随时开放</span><a className="business-contact" href="mailto:2206037172@qq.com"><b>商务合作</b><span>游戏公司 / 工作室</span><small>2206037172@qq.com</small></a></div></div>
     <div className="cream-lobby-grid">
       <section className="cream-primary">
         <article className="cream-hero">
