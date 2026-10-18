@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { spawnSync } from "node:child_process";
 
-for (const generated of ["app/legal-notice.js", "app/ai-psychology.js", "app/page.js", "app/poker-core.js", "app/table-config.js"]) {
+for (const generated of ["app/legal-notice.js", "app/ai-psychology.js", "app/page.js", "app/poker-core.js", "app/table-config.js", "app/mobile-layout.js"]) {
   if (fs.existsSync(generated)) fs.unlinkSync(generated);
 }
 

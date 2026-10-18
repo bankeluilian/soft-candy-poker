@@ -6,6 +6,7 @@ const files = [
   ["app/ai-psychology.ts", "app/ai-psychology.js"],
   ["app/poker-core.ts", "app/poker-core.js"],
   ["app/table-config.ts", "app/table-config.js"],
+  ["app/mobile-layout.ts", "app/mobile-layout.js"],
   ["app/page.tsx", "app/page.js"],
   ["preview-entry.tsx", "preview-entry.js"],
 ];
@@ -21,7 +22,7 @@ for (const [source, target] of files) {
     },
     fileName: source,
   });
-  fs.writeFileSync(target, output.outputText.replace(/from "\.\/(poker-core|table-config|ai-psychology|legal-notice)"/g, 'from "./$1.js"'), "utf8");
+  fs.writeFileSync(target, output.outputText.replace(/from "\.\/(poker-core|table-config|ai-psychology|legal-notice|mobile-layout)"/g, 'from "./$1.js"'), "utf8");
 }
 
 console.log("Preview files generated.");

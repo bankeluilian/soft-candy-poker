@@ -1964,3 +1964,157 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
     box-shadow: 0 16px 44px rgba(49,39,25,.24);
   }
 }
+
+/* One landscape canvas for phones, including browsers without orientation locking. */
+body:has(.mobile-table) { overflow: hidden; }
+.game-app.table-mode.mobile-table {
+  position: fixed;
+  inset: 0 auto auto 0;
+  z-index: 100;
+  display: block;
+  width: var(--table-width);
+  height: var(--table-height);
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  transform-origin: 0 0;
+  transform: scale(var(--table-scale));
+}
+.game-app.table-mode.mobile-rotated {
+  transform: translateX(calc(var(--table-height) * var(--table-scale))) rotate(90deg) scale(var(--table-scale));
+}
+.mobile-table .main-shell,
+.mobile-table .page-stage { width: 100%; height: calc(var(--table-height) - 24px); min-height: 0; margin: 0; }
+.mobile-table .table-screen {
+  width: 100%; height: 100%; min-width: 0; min-height: 0;
+  grid-template-columns: minmax(0,1fr) 270px;
+  grid-template-rows: 44px minmax(0,1fr);
+  overflow: hidden;
+}
+.mobile-table .table-screen.is-busy { grid-template-columns: minmax(0,1fr); }
+.mobile-table .landscape-hint, .mobile-table .ping { display: none; }
+.mobile-table .table-header {
+  grid-column: 1 / -1; grid-row: 1;
+  width: 100%; height: 44px; min-height: 44px;
+  padding: 0 8px; gap: 10px;
+}
+.mobile-table .table-header > div:first-child { flex: 0 1 160px; gap: 6px; }
+.mobile-table .table-header > div:first-child > img { width: 28px; height: 28px; flex: 0 0 28px; }
+.mobile-table .table-header > div:first-child > b { max-width: 130px; font-size: 11px; }
+.mobile-table .table-header .blind-label { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 4px; margin: 0; font-size: 11px; }
+.mobile-table .table-header .blind-label .chip-icon { width: 18px; height: 18px; }
+.mobile-table .table-head-actions { flex: 0 0 auto; margin-left: auto; gap: 6px; }
+.mobile-table .table-head-actions button {
+  display: inline-flex; flex: 0 0 38px;
+  width: 38px; min-width: 38px; height: 38px;
+  padding: 0; border-radius: 10px;
+}
+.mobile-table .table-head-actions button span { font-size: 16px; }
+.mobile-table .table-head-actions button em { display: none; }
+.mobile-table .table-area {
+  grid-column: 1; grid-row: 2;
+  display: grid; grid-template-rows: minmax(0,1fr) 44px;
+  place-items: center; align-content: stretch;
+  width: 100%; height: 100%; min-height: 0;
+  padding: 34px 36px 0; overflow: visible;
+}
+.mobile-table .wood-table,
+.mobile-table .table-screen:has(.action-panel.expanded) .wood-table,
+.mobile-table .table-screen:has(.showdown-footer) .wood-table {
+  grid-row: 1; width: min(calc(100% - 16px),calc((var(--table-height) - 188px) * 1.7));
+  height: auto; min-height: 0; max-height: none;
+  aspect-ratio: 1.7; padding: 10px;
+  top: auto; left: auto; margin: 0 0 32px;
+  border-radius: 44%; transform: none;
+}
+.mobile-table .felt { border-width: 3px; }
+.mobile-table .table-seat {
+  width: 60px; min-width: 60px; height: 60px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  transform: none !important;
+}
+.mobile-table .table-seat > img { width: 28px; height: 28px; min-width: 28px; border-width: 2px; }
+.mobile-table .table-seat > div:not(.card-pair):not(.seat-bet) {
+  flex: 0 0 auto; width: 60px; min-width: 0; height: 29px;
+  margin: 0; padding: 2px; border-radius: 7px;
+  text-align: center;
+}
+.mobile-table .table-seat > div:not(.card-pair):not(.seat-bet) > b { display: block; max-width: 56px; font-size: 9px; line-height: 11px; }
+.mobile-table .table-seat > div:not(.card-pair):not(.seat-bet) > span { display: flex; justify-content: center; align-items: center; gap: 2px; font-size: 9px; line-height: 12px; }
+.mobile-table .table-seat > div:not(.card-pair):not(.seat-bet) > span .chip-icon { width: 12px; height: 12px; }
+.mobile-table .table-seat small { display: none; }
+.mobile-table .table-seat.p1 { top: -34px; bottom: auto; left: 8%; right: auto; }
+.mobile-table .table-seat.p2 { top: -34px; bottom: auto; right: 8%; left: auto; }
+.mobile-table .table-seat.p3 { top: calc(50% - 30px); right: -22px; bottom: auto; left: auto; }
+.mobile-table .table-seat.p6 { top: calc(50% - 30px); left: -22px; right: auto; bottom: auto; }
+.mobile-table .table-seat.p4 { top: auto; bottom: -26px; left: auto; right: 8%; }
+.mobile-table .table-seat.p5 { top: auto; bottom: -26px; left: 8%; right: auto; }
+.mobile-table .table-seat .card-pair {
+  position: absolute; top: 63px; left: 12px; right: auto; bottom: auto;
+  gap: 2px; margin: 0; transform: none;
+}
+.mobile-table .table-seat .card-pair img,
+.mobile-table .table-seat .card-pair .playing-card { width: 16px; height: 22px; min-width: 16px; padding: 0; }
+.mobile-table .table-seat.p3 .card-pair,
+.mobile-table .table-seat.p6 .card-pair,
+.mobile-table .table-seat.p5 .card-pair { top: -24px; }
+.mobile-table .table-seat .seat-bet {
+  top: 38px; left: 65px; right: auto; bottom: auto;
+  height: 20px; gap: 3px; transform: none;
+}
+.mobile-table .table-seat.p2 .seat-bet,
+.mobile-table .table-seat.p3 .seat-bet,
+.mobile-table .table-seat.p4 .seat-bet { left: auto; right: 65px; }
+.mobile-table .seat-bet .chip-stack-ui { flex: 0 0 24px; width: 24px; height: 18px; }
+.mobile-table .seat-bet .chip-icon { width: 16px; height: 16px; }
+.mobile-table .seat-bet em { min-width: 0; padding: 2px 4px; font-size: 9px; }
+.mobile-table .pot { top: 8px; gap: 1px; transform: none; }
+.mobile-table .pot > span { padding: 1px 7px; font-size: 9px; }
+.mobile-table .pot b { font-size: 14px; }
+.mobile-table .pot small, .mobile-table .pot .chip-stack-ui { display: none; }
+.mobile-table .community-cards { position: absolute; top: 50%; left: 50%; gap: 3px; margin: 0; transform: translate(-50%,-50%); }
+.mobile-table .community-cards .playing-card,
+.mobile-table .community-cards > i { width: 24px; height: 34px; min-width: 24px; border-radius: 4px; padding: 0; }
+.mobile-table .last-action { bottom: 8px; max-width: 56%; padding: 3px 7px; font-size: 9px; text-align: center; }
+.mobile-table .hero-cards { position: static; grid-row: 2; align-self: end; height: 44px; gap: 4px; margin: 0; transform: none; }
+.mobile-table .hero-cards .playing-card { width: 29px; height: 41px; min-width: 29px; padding: 0; }
+.mobile-table .dealer-deck { top: 8px; right: 16%; transform: scale(.5); }
+.mobile-table .deal-status { top: auto; right: 50%; bottom: 8px; transform: translateX(50%); font-size: 9px; }
+.mobile-table .action-panel.expanded,
+.mobile-table .showdown-footer {
+  position: relative; grid-column: 2; grid-row: 2;
+  inset: auto; align-self: stretch; width: 100%; max-width: none;
+  height: 100%; min-height: 0; max-height: none;
+  margin: 0; padding: 8px; transform: none;
+  border-radius: 12px 0 0; border: 1px solid #ded4c3;
+  overflow: auto; box-shadow: none;
+}
+.mobile-table .table-screen.is-busy .action-panel { display: none; }
+.mobile-table .showdown-footer { grid-template-columns: minmax(0,1fr); gap: 8px; align-content: start; }
+.mobile-table .action-panel.expanded { display: grid; grid-template-columns: minmax(0,1fr); grid-template-rows: auto auto; align-content: start; gap: 8px; }
+.mobile-table .action-panel.expanded .hand-info { display: block; grid-column: 1; grid-row: 1; }
+.mobile-table .action-panel.expanded .hand-info-head > b { min-height: 28px; padding: 5px 35px 5px 6px; font-size: 11px; }
+.mobile-table .action-panel.expanded .hand-metrics { gap: 4px; margin-top: 4px; }
+.mobile-table .action-panel.expanded .hand-metrics span { min-width: 0; padding: 3px; font-size: 9px; }
+.mobile-table .action-panel.expanded .hand-metrics strong { font-size: 13px; }
+.mobile-table .action-panel.expanded .odds-row { display: flex; overflow-x: auto; gap: 3px; margin-top: 4px; }
+.mobile-table .action-panel.expanded .odds-row > span { min-width: 48px; padding: 2px 4px; }
+.mobile-table .action-panel.expanded .odds-row b { font-size: 9px; }
+.mobile-table .action-panel.expanded .odds-row em { font-size: 10px; }
+.mobile-table .action-panel.expanded .countdown { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-width: 2px; font-size: 12px; }
+.mobile-table .countdown small { display: none; }
+.mobile-table .action-panel.expanded .bet-controls { grid-column: 1; grid-row: 2; gap: 7px; }
+.mobile-table .action-panel.expanded .main-actions { gap: 4px; margin: 0; }
+.mobile-table .action-panel.expanded .main-actions button { height: 42px; padding: 0 3px; font-size: 12px; }
+.mobile-table .action-panel.expanded .slider-row { grid-template-columns: 32px minmax(0,1fr) 32px 54px; gap: 3px; min-height: 36px; }
+.mobile-table .action-panel.expanded .slider-row button,
+.mobile-table .action-panel.expanded .slider-row > input:last-child { min-width: 0; height: 36px; font-size: 12px; }
+.mobile-table .action-panel.expanded .quick-bets { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 4px; overflow: visible; }
+.mobile-table .action-panel.expanded .quick-bets button { min-width: 0; height: 32px; padding: 0 2px; font-size: 10px; }
+.mobile-table .legal-footer { width: 100%; height: 24px; min-height: 24px; padding: 2px 8px; gap: 8px; flex-wrap: nowrap; overflow: hidden; font-size: 9px; }
+.mobile-table .legal-footer > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mobile-table .legal-footer .business-contact-footer { display: none; }
+.mobile-table .legal-footer > button { flex: 0 0 auto; padding: 0; font-size: 9px; }
+.mobile-table .modal-backdrop, .mobile-table .all-in-confirm { position: absolute; padding: 10px; }
+.mobile-table .modal-card { width: min(640px,calc(var(--table-width) - 24px)); max-width: none; max-height: calc(var(--table-height) - 20px); }
+.mobile-table .all-in-confirm section { width: min(430px,calc(var(--table-width) - 24px)); }
