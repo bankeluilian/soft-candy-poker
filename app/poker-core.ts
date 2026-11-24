@@ -68,8 +68,7 @@ export function seededRandom(seed: string) {
   };
 }
 
-export function shuffledDeck(seed = "") {
-  const random = seed ? seededRandom(seed) : Math.random;
+export function shuffledDeck(seed = "", random = seed ? seededRandom(seed) : Math.random) {
   const deck = cardSuits.flatMap((suit) => cardRanks.map((rank) => `${rank}${suit}`));
   for (let i = deck.length - 1; i > 0; i -= 1) {
     const j = Math.floor(random() * (i + 1));
@@ -78,12 +77,12 @@ export function shuffledDeck(seed = "") {
   return deck;
 }
 
-export function dealRandomHand(seed = ""): DealtHand {
-  const deck = shuffledDeck(seed);
+export function dealRandomHand(seed = "", options: { players?: number; random?: () => number } = {}): DealtHand {
+  const deck = shuffledDeck(seed, options.random);
   // Live-table dealing order: two clockwise rounds, one card per player each
   // round, then a burn card before the flop / turn / river. Statistically this
   // stays a uniform deal, but the sequence mirrors a real dealer's procedure.
-  const players: string[][] = [[], [], [], [], [], []];
+  const players: string[][] = Array.from({ length: options.players ?? 6 }, () => []);
   for (let round = 0; round < 2; round += 1) for (const player of players) player.push(deck.pop()!);
   const burn = [deck.pop()!, deck.pop()!, deck.pop()!];
   const board = [deck.pop()!, deck.pop()!, deck.pop()!, deck.pop()!, deck.pop()!];

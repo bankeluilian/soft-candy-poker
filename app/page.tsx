@@ -4,12 +4,13 @@ import { useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import { dealRandomHand, bestOfSeven, settlePots, estimateEquity, actionTarget, canRaise as canPlayerRaise } from "./poker-core";
 import { tableConfig, carryStacks, resetEmptyChips, RESET_CHIPS, type TableConfig } from "./table-config";
 import { mobileTableLayout, tableLocalCenter } from "./mobile-layout";
+import { LanRoom } from "./lan-room";
 
 import { freshAiMemories, learnFromHand, aiPsychology, aiSeats, type AiMemories } from "./ai-psychology";
 
 import { LegalNotice, TERMS_STORAGE_KEY, hasAcceptedTerms, createTermsAcceptance } from "./legal-notice";
 
-type Page = "lobby" | "room" | "table" | "friends" | "history" | "tasks" | "profile" | "store" | "tutorial" | "settings" | "messages";
+type Page = "lobby" | "lan" | "room" | "table" | "friends" | "history" | "tasks" | "profile" | "store" | "tutorial" | "settings" | "messages";
 type Modal = "matching" | "join" | "create" | "settlement" | "nextHand" | "replay" | "leave" | "rules" | "reconnect" | "resetHistory" | "resetChips" | "legal" | null;
 type Toast = { id: number; text: string };
 type SettingsState = { music: number; musicEnabled: boolean; effects: number; prompts: number; dealAnimation: boolean; chipAnimation: boolean; handHint: boolean; skipRepeat: boolean; confirmAllIn: boolean; fourColor: boolean; onlineVisible: boolean; strangerRequests: boolean; publicStats: boolean };
@@ -34,6 +35,7 @@ const rankNames: Record<string, string> = { A: "ace", K: "king", Q: "queen", J: 
 const suitNames: Record<string, string> = { "♠": "spades", "♥": "hearts", "♦": "diamonds", "♣": "clubs" };
 const navItems: { page: Page; icon: string; label: string }[] = [
   { page: "lobby", icon: "⌂", label: "游戏大厅" },
+  { page: "lan", icon: "♠", label: "局域网对战" },
   { page: "friends", icon: "♧", label: "好友" },
   { page: "history", icon: "♕", label: "战绩" },
   { page: "tasks", icon: "✓", label: "任务" },
@@ -253,7 +255,7 @@ function useRealtimeRoom(callbacks: { room: (room: RealtimeRoom, id: string) => 
   }, []);
 
   const send = (payload: Record<string, unknown>) => {
-    if (STATIC_BUILD) { callbacks.error("静态版仅支持 AI 单机对局"); return false; }
+    if (STATIC_BUILD) { callbacks.error("静态版请从大厅进入局域网对战"); return false; }
     if (socketRef.current?.readyState !== WebSocket.OPEN) { callbacks.error("联机服务正在重连，请稍后再试"); return false; }
     socketRef.current.send(JSON.stringify(payload));
     return true;
@@ -489,6 +491,7 @@ function PokerGame() {
         {!bare && <Topbar resetChips={() => setModal("resetChips")} chips={chips} xp={xp} messages={() => go("messages")} settings={() => go("settings")} />}
         <div className="page-stage">
           {page === "lobby" && <Lobby chips={chips} results={handHistory} claimed={claimed} equipped={equipped} startMatch={startMatch} create={() => setModal("create")} join={() => setModal("join")} go={go} networkStatus={realtime.status} />}
+          {page === "lan" && <LanRoom leave={() => go("lobby")} renderCard={(card) => <PlayingCard key={card} card={card} />} />}
           {page === "room" && <FriendRoom code={roomCode} owner={roomOwner} room={realtime.room} localOptions={localOptions} guestId={realtime.guestId} networkStatus={realtime.status} start={startFriendRoom} toggleReady={realtime.toggleReady} leave={() => go("lobby")} toast={toast} />}
           {page === "table" && <PokerTable key={`${handNo}-${tableSeed}`} seed={tableSeed} handNo={handNo} initialStack={tableStack} config={config} previousStacks={previousStacks} aiMemories={aiMemories} settings={settings} equipped={equipped} leave={() => setModal("leave")} finish={finishHand} rules={() => setModal("rules")} reconnect={() => setModal("reconnect")} toast={toast} toggleMusic={() => { setSettings((v) => ({ ...v, musicEnabled: !v.musicEnabled })); toast(settings.musicEnabled ? "背景音乐已关闭" : "背景音乐已开启"); }} />}
           {page === "friends" && <Friends toast={toast} invite={() => { setRoomOwner(true); createRoom(); }} />}
@@ -553,6 +556,7 @@ function Lobby({ chips, results, claimed, equipped, startMatch, create, join, go
           <div className="cream-hero-copy"><span className="cream-tag">✦ 经典六人桌 · 轻松开局</span><h2>把烦恼放一边，<br/>把好牌留手里。</h2><p>和五位动物伙伴一起，享受一场小小的博弈。</p><div className="cream-table-facts"><span>♠ 无限注德州</span><span>盲注 50 / 100</span></div><button className="btn primary cream-play" onClick={startMatch}>开始一局 <span>→</span></button><small>纯虚拟筹码 · 输光也可以重新出发</small></div>
           <div className="cream-hero-art"><span className="bear-note">给你留好座位啦 ♡</span><img src={`${A}/characters/mascot-dealer-cards.webp`} alt="奶油小熊拿着扑克牌邀请你入座"/><span className="bear-sign">YOUR LUCKY LITTLE DEALER</span></div>
         </article>
+        <section className="cream-room-strip"><div><b>局域网好友对战</b><p>连同一个 Wi-Fi，两台设备同桌玩。</p></div><button className="btn green" onClick={() => go("lan")}>和好友同桌</button></section>
         <div className="cream-section-heading"><h2>今天想怎么玩</h2><span>一点练习，一点快乐</span></div>
         <div className="cream-mode-grid">
           <button className="cream-mode mode-pink" onClick={() => go("tutorial")}><span className="mode-kicker">从第一手开始</span><h3>新手小课堂</h3><p>认识牌型，慢慢上手</p><img src={`${A}/characters/mascot-reading-rules.webp`} alt=""/><span className="mode-link">去学习 <b>↗</b></span></button>

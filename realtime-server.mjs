@@ -94,7 +94,7 @@ const server = createServer(async (request, response) => {
       response.end(css);
       return;
     }
-    if (!(["/index.html", "/preview-entry.js", "/app/page.js", "/app/poker-core.js", "/app/table-config.js", "/app/ai-psychology.js", "/app/legal-notice.js"].includes(pathname) || pathname.startsWith("/poker-assets/"))) throw new Error("Not public");
+    if (!(["/index.html", "/preview-entry.js", "/app/page.js", "/app/poker-core.js", "/app/table-config.js", "/app/ai-psychology.js", "/app/legal-notice.js", "/app/mobile-layout.js", "/app/lan-poker.js", "/app/lan-peer.js", "/app/lan-room.js"].includes(pathname) || pathname.startsWith("/poker-assets/"))) throw new Error("Not public");
     const assetRequest = pathname.startsWith("/poker-assets/");
     if (assetRequest) pathname = `/public${pathname}`;
     const target = resolve(ROOT, `.${pathname}`);
