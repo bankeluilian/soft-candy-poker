@@ -2161,3 +2161,8 @@ body:has(.mobile-table) { overflow: hidden; }
   .lan-felt { border-radius: 18px; }
   .lan-actions { gap: 7px; }
 }
+
+.lan-roster { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 10px 0; padding: 0; }
+.lan-roster li { padding: 4px 10px; border: 1px solid var(--line); border-radius: 12px; color: #5f4632; font-size: 13px; }
+.lan-opponents { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 110px), 1fr)); gap: 10px; }
+.lan-opponents .lan-cards > * { width: clamp(24px, 6vw, 38px); }

@@ -556,7 +556,7 @@ function Lobby({ chips, results, claimed, equipped, startMatch, create, join, go
           <div className="cream-hero-copy"><span className="cream-tag">✦ 经典六人桌 · 轻松开局</span><h2>把烦恼放一边，<br/>把好牌留手里。</h2><p>和五位动物伙伴一起，享受一场小小的博弈。</p><div className="cream-table-facts"><span>♠ 无限注德州</span><span>盲注 50 / 100</span></div><button className="btn primary cream-play" onClick={startMatch}>开始一局 <span>→</span></button><small>纯虚拟筹码 · 输光也可以重新出发</small></div>
           <div className="cream-hero-art"><span className="bear-note">给你留好座位啦 ♡</span><img src={`${A}/characters/mascot-dealer-cards.webp`} alt="奶油小熊拿着扑克牌邀请你入座"/><span className="bear-sign">YOUR LUCKY LITTLE DEALER</span></div>
         </article>
-        <section className="cream-room-strip"><div><b>局域网好友对战</b><p>连同一个 Wi-Fi，两台设备同桌玩。</p></div><button className="btn green" onClick={() => go("lan")}>和好友同桌</button></section>
+        <section className="cream-room-strip"><div><b>局域网好友对战</b><p>连同一个 Wi-Fi，2～6 人同桌玩。</p></div><button className="btn green" onClick={() => go("lan")}>和好友同桌</button></section>
         <div className="cream-section-heading"><h2>今天想怎么玩</h2><span>一点练习，一点快乐</span></div>
         <div className="cream-mode-grid">
           <button className="cream-mode mode-pink" onClick={() => go("tutorial")}><span className="mode-kicker">从第一手开始</span><h3>新手小课堂</h3><p>认识牌型，慢慢上手</p><img src={`${A}/characters/mascot-reading-rules.webp`} alt=""/><span className="mode-link">去学习 <b>↗</b></span></button>

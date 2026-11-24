@@ -143,3 +143,11 @@ test("consent requires explicit confirmation and the current terms version", () 
     assert.equal(hasAcceptedTerms(raw), false);
   }
 });
+
+test("tiers with identical eligibility split once when tied players play the board", () => {
+  const board = ["A♠", "K♠", "Q♠", "J♠", "10♠"];
+  const players = [[], [], [], ["2♣", "3♣"], ["4♣", "5♣"]];
+  const result = settlePots([25, 50, 75, 100, 100], [3, 4], players, board, 0);
+  assert.deepEqual(result.sidePots, [350]);
+  assert.deepEqual(result.payouts, [0, 0, 0, 175, 175]);
+});

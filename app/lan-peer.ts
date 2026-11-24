@@ -1,4 +1,4 @@
-const channelLabel = "soft-candy-poker-lan-v1";
+const channelLabel = "soft-candy-poker-lan-v2";
 const signalLimit = 30000;
 
 type SignalType = "offer" | "answer";
@@ -16,7 +16,7 @@ function readSignal(code: string, type: SignalType): RTCSessionDescriptionInit {
     if (data.game !== channelLabel || data.type !== type || typeof data.sdp !== "string" || !data.sdp.startsWith("v=0")) throw new Error();
     return { type, sdp: data.sdp };
   } catch {
-    throw new Error("配对信息格式不正确，请复制对应步骤的完整信息。");
+    throw new Error("配对信息格式不正确，请双方刷新到同一版本，再复制对应步骤的完整信息。");
   }
 }
 

@@ -144,11 +144,10 @@ export function bestOfSeven(cards: string[]): HandScore {
 
 export function settlePots(totalBets: number[], active: number[], players: string[][], board: string[], dealerSeat: number) {
   const payouts = totalBets.map(() => 0);
-  const sidePots: number[] = [];
+  const pots: { amount: number; eligible: number[]; key: string }[] = [];
   const winningSeats = new Set<number>();
   let mainWinner = active[0];
   let previous = 0;
-  let previousEligibility = "";
   for (const level of [...new Set(totalBets.filter((amount) => amount > 0))].sort((a, b) => a - b)) {
     const contributors = totalBets.flatMap((amount, seat) => amount >= level ? [seat] : []);
     const amount = (level - previous) * contributors.length;
@@ -157,15 +156,26 @@ export function settlePots(totalBets: number[], active: number[], players: strin
     if (contributors.length === 1) { payouts[contributors[0]] += amount; continue; }
     const eligible = active.filter((seat) => totalBets[seat] >= level);
     if (!eligible.length) throw new Error("Pot has no eligible player");
-    const scored = eligible.map((seat) => ({ seat, score: bestOfSeven([...players[seat], ...board]) })).sort((a, b) => compareScores(b.score, a.score));
-    const winners = scored.filter((entry) => compareScores(entry.score, scored[0].score) === 0).map((entry) => entry.seat);
-    if (!sidePots.length) mainWinner = winners[0];
-    const ordered = winners.sort((a, b) => ((a - dealerSeat - 1 + totalBets.length) % totalBets.length) - ((b - dealerSeat - 1 + totalBets.length) % totalBets.length));
-    ordered.forEach((seat, index) => { payouts[seat] += Math.floor(amount / winners.length) + (index < amount % winners.length ? 1 : 0); winningSeats.add(seat); });
-    const eligibility = eligible.join(",");
-    if (sidePots.length && eligibility === previousEligibility) sidePots[sidePots.length - 1] += amount;
-    else sidePots.push(amount);
-    previousEligibility = eligibility;
+    const key = eligible.join(",");
+    const last = pots.at(-1);
+    // Folded players' contributions can create tiers with the same eligible seats.
+    // Split the entire pot once so these tiers cannot introduce extra odd chips.
+    if (last?.key === key) last.amount += amount;
+    else pots.push({ amount, eligible, key });
   }
-  return { payouts, sidePots, winningSeats: [...winningSeats], mainWinner };
+
+  const seatCount = totalBets.length;
+  const distance = (seat: number) => (seat - dealerSeat - 1 + seatCount) % seatCount;
+  pots.forEach(({ amount, eligible }, index) => {
+    const scored = eligible.map((seat) => ({ seat, score: bestOfSeven([...players[seat], ...board]) }))
+      .sort((a, b) => compareScores(b.score, a.score));
+    const winners = scored.filter((entry) => compareScores(entry.score, scored[0].score) === 0).map((entry) => entry.seat);
+    if (index === 0) mainWinner = winners[0];
+    const ordered = winners.sort((a, b) => distance(a) - distance(b));
+    ordered.forEach((seat, place) => {
+      payouts[seat] += Math.floor(amount / winners.length) + (place < amount % winners.length ? 1 : 0);
+      winningSeats.add(seat);
+    });
+  });
+  return { payouts, sidePots: pots.map((pot) => pot.amount), winningSeats: [...winningSeats], mainWinner };
 }
